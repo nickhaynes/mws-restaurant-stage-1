@@ -1,6 +1,19 @@
 let restaurant;
 var newMap;
 
+/* Register service worker */
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('sw.js')
+    .then(function(reg) {
+      console.log('Service worker registered!');
+    })
+    .catch(function(error) {
+      console.log('Service worker failed registration.');
+    });
+}
+
 /**
  * Initialize map as soon as the page is loaded.
  */
@@ -22,7 +35,7 @@ initMap = () => {
         scrollWheelZoom: false
       });
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-        mapboxToken: 'pk.eyJ1Ijoiam5oYXluZXMiLCJhIjoiY2pscjZhcjByMDAxZTNxbzczYmtwN3dsdSJ9.X3Bwa6ExEbV7ZE1NpdY5UQ>',
+        mapboxToken: 'pk.eyJ1Ijoiam5oYXluZXMiLCJhIjoiY2pscjZhcjByMDAxZTNxbzczYmtwN3dsdSJ9.X3Bwa6ExEbV7ZE1NpdY5UQ',
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
           '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -149,19 +162,29 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
-  const name = document.createElement('p');
+  const reviewer = document.createElement('div');
+  reviewer.className = 'reviewer';
+  li.appendChild(reviewer);
+
+  
+  const name = document.createElement('div');
+  name.className = 'reviewer-name';
   name.innerHTML = review.name;
-  li.appendChild(name);
+  reviewer.appendChild(name);
+  
 
-  const date = document.createElement('p');
+  const date = document.createElement('div');
+  date.className = 'reviewer-date';
   date.innerHTML = review.date;
-  li.appendChild(date);
+  reviewer.appendChild(date);
 
-  const rating = document.createElement('p');
+  const rating = document.createElement('div');
+  rating.className = 'review-rating';
   rating.innerHTML = `Rating: ${review.rating}`;
   li.appendChild(rating);
 
   const comments = document.createElement('p');
+  comments.className = 'review-comments'
   comments.innerHTML = review.comments;
   li.appendChild(comments);
 
